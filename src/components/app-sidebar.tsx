@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { IconDashboard, IconMessage, IconMessages, IconUsers } from "@tabler/icons-react";
+import { IconDashboard, IconMessage, IconMessages } from "@tabler/icons-react";
 import {
   Sidebar,
   SidebarContent,
@@ -13,6 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
@@ -60,18 +61,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={isActive("/admin")}>
-              <a href="/admin/users">
-                <IconUsers className="!size-4" />
-                <span>Users</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-3 py-3">
+        <div className="px-3 py-3 space-y-3">
+          <SignOutButton />
           <a href="/dashboard" className="flex items-center justify-start">
             <Image
               src="/BAIUST_Comp_Club_Logo_Black.png"
