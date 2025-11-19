@@ -11,7 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { IconDashboard, IconMessage, IconMessages, IconUsers } from "@tabler/icons-react";
+import { IconDashboard, IconMessage, IconMessages } from "@tabler/icons-react";
 
 export function NavMain({ items }: { items: any[] }) {
   return (
@@ -40,14 +40,6 @@ export function NavMain({ items }: { items: any[] }) {
               <a href="/sms/bulk">
                 <IconMessages className="!size-4" />
                 <span>Bulk Send</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href="/admin/users">
-                <IconUsers className="!size-4" />
-                <span>Users</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

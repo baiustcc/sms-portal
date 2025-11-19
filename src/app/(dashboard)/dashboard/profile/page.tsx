@@ -1,36 +1,70 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { readSession } from "@/lib/session";
+import { DEFAULT_FOOTER } from "@/lib/sms";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 const portalFacts = [
-  { label: "Access", value: "Public (no sign-in required)" },
-  { label: "SMS Footer", value: process.env.DEFAULT_SMS_FOOTER ?? "- BAIUST Computer Club" },
+  { label: "Access", value: "OTP-secured via AUTH_ALLOWED_NUMBERS" },
+  { label: "SMS Footer", value: DEFAULT_FOOTER },
   { label: "Single Send", value: "/sms/single" },
   { label: "Bulk Send", value: "/sms/bulk" },
 ];
 
-export default function ProfilePage() {
+const mask = (value?: string) => {
+  if (!value) return "-";
+  return value.slice(-4).padStart(value.length, "•");
+};
+
+export default async function ProfilePage() {
+  const session = await readSession();
+
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Portal Access</CardTitle>
-          <CardDescription>
-            Authentication has been removed. Anyone with the link can schedule or send SMS from this interface.
-          </CardDescription>
+          <CardTitle>Session Details</CardTitle>
+          <CardDescription>Minimal metadata about your current authenticated session.</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 text-sm text-muted-foreground">
-          <p>
-            If you need to limit access again in the future, reintroduce authentication or place the deployment behind a
-            network-level restriction such as a VPN or reverse proxy allow-list.
-          </p>
-          <p>Until then, keep your SMS API key rotated regularly and monitor usage from your SMS gateway dashboard.</p>
+        <CardContent>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">Phone</TableCell>
+                <TableCell>{mask(session?.number)}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">Session TTL</TableCell>
+                <TableCell>12 hours (renew by re-authenticating)</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Quick Facts</CardTitle>
-          <CardDescription>Reference values that are always available for every visitor.</CardDescription>
+          <CardTitle>Security Notes</CardTitle>
+          <CardDescription>Review these controls whenever you rotate credentials.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm text-muted-foreground">
+          <p>
+            OTP notifications include the requester&rsquo;s IP address, user agent, and timestamp. Ensure the numbers in
+            <code> AUTH_ALLOWED_NUMBERS </code> and <code>AUTH_NOTIFICATION_NUMBERS</code> belong to administrators you
+            trust.
+          </p>
+          <p>Revoke access instantly by removing a phone number from the environment and restarting the app.</p>
+        </CardContent>
+      </Card>
+
+      <div className="max-w-sm">
+        <SignOutButton />
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Links</CardTitle>
+          <CardDescription>Reference targets that stay consistent across sessions.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
