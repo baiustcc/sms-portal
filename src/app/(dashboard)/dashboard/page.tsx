@@ -1,18 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getSmsBalance } from "@/lib/sms";
-import { getSession } from "@/lib/auth";
 
 export default async function DashboardPage() {
-  const [session, balance] = await Promise.all([
-    getSession(),
-    getSmsBalance().catch(() => ({ response_code: 500, balance: 0 })),
-  ]);
+  const balance = await getSmsBalance().catch(() => ({ response_code: 500, balance: 0 }));
 
   return (
     <div className="p-4 space-y-6">
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">Welcome{session?.user?.name ? `, ${session.user.name}` : ""}</h1>
-        <p className="text-muted-foreground">Use the sidebar to navigate.</p>
+        <h1 className="text-2xl font-semibold">Welcome to the SMS Portal</h1>
+        <p className="text-muted-foreground">
+          This dashboard is now open to everyone. Use the sidebar to send single or bulk SMS without signing in.
+        </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
